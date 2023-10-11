@@ -1,6 +1,6 @@
 function showValue() {
   function isValid(val) {
-    let expr = display.textContent;
+    let expr = expression.textContent;
     if (val === ".") {
       // cant add two dots in a row
       if (expr[expr.length - 1] == ".") {
@@ -12,30 +12,34 @@ function showValue() {
 
   let val = this.getAttribute("val");
   if (isValid(val)) {
-    display.textContent += val;
+    expression.textContent += val;
   }
 }
 
 function clearDisplay() {
-  display.textContent = "";
+  document.querySelector("#history").textContent = "";
+  expression.textContent = "";
 }
 
 function evaluateDisplay() {
-  let equation = display.textContent;
+  let equation = expression.textContent;
   console.log(equation);
   let result = eval(equation);
-  display.textContent = result;
+  expression.textContent = result;
+  document.querySelector("#history").textContent = equation;
 }
 
 function backspace() {
-  var textContent = display.textContent;
+  document.querySelector("#history").textContent = "";
+  var textContent = expression.textContent;
   //   console.log(textContent); // for some reason it's adding the x, so go back 2
   var modifiedText = textContent.slice(0, -2);
-  display.textContent = modifiedText;
+  expression.textContent = modifiedText;
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  const display = document.querySelector("#display");
+  let history = document.querySelector("#history");
+  const expression = document.querySelector("#expression");
   var body = document.querySelector("body");
   body.classList.remove("preload");
   var body = document.querySelector("body");
