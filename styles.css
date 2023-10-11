@@ -1,10 +1,13 @@
 * {
   margin: 0;
 }
-
-h1 {
-  /* font-size: 1vh; */
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
 }
+
 .container {
   display: flex;
   flex: 1;
@@ -58,13 +61,17 @@ h1 {
 
 .button {
   display: flex;
+  cursor: pointer;
   height: 90%;
   aspect-ratio: 1/1;
   border-radius: 30%;
   justify-content: center;
   align-items: center;
   background-color: #cccdc6;
-  /* border: 1px solid black; */
+  transition: border-radius 0.3s ease-in;
+}
+.button:hover {
+  border-radius: 20%;
 }
 
 #zero {
@@ -81,4 +88,10 @@ h1 {
 .button.operator {
   background-color: #5ac8fa;
   color: white;
+}
+
+.screen {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
