@@ -1,6 +1,19 @@
 function showValue() {
+  function isValid(val) {
+    let expr = display.textContent;
+    if (val === ".") {
+      // cant add two dots in a row
+      if (expr[expr.length - 1] == ".") {
+        return false;
+      }
+    }
+    return true;
+  }
+
   let val = this.getAttribute("val");
-  display.textContent += val;
+  if (isValid(val)) {
+    display.textContent += val;
+  }
 }
 
 function clearDisplay() {
