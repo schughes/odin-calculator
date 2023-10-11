@@ -9,6 +9,14 @@ function clearDisplay() {
   display.textContent = "";
 }
 
+function evaluateDisplay() {
+  let display = document.querySelector("#display");
+  let equation = display.textContent;
+  console.log(equation);
+  let result = eval(equation);
+  display.textContent = result;
+}
+
 document.addEventListener("DOMContentLoaded", function (event) {
   var body = document.querySelector("body");
   body.classList.remove("preload");
@@ -21,8 +29,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
     button.addEventListener("click", showValue);
   });
 
-  // special buttons
+  ///// special buttons
+
+  // clear display
   var c = document.querySelector("#c");
   c.removeEventListener("click", showValue);
   c.addEventListener("click", clearDisplay);
+
+  // evaluate
+  var evaluate = document.querySelector("#evaluate");
+  evaluate.removeEventListener("click", showValue);
+  evaluate.addEventListener("click", evaluateDisplay);
 });
