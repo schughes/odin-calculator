@@ -1,23 +1,28 @@
 function showValue() {
   let val = this.getAttribute("val");
-  let display = document.querySelector("#display");
   display.textContent += val;
 }
 
 function clearDisplay() {
-  let display = document.querySelector("#display");
   display.textContent = "";
 }
 
 function evaluateDisplay() {
-  let display = document.querySelector("#display");
   let equation = display.textContent;
   console.log(equation);
   let result = eval(equation);
   display.textContent = result;
 }
 
+function backspace() {
+  var textContent = display.textContent;
+  //   console.log(textContent); // for some reason it's adding the x, so go back 2
+  var modifiedText = textContent.slice(0, -2);
+  display.textContent = modifiedText;
+}
+
 document.addEventListener("DOMContentLoaded", function (event) {
+  const display = document.querySelector("#display");
   var body = document.querySelector("body");
   body.classList.remove("preload");
   var body = document.querySelector("body");
@@ -35,6 +40,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var c = document.querySelector("#c");
   c.removeEventListener("click", showValue);
   c.addEventListener("click", clearDisplay);
+
+  // backspace
+  var bs = document.querySelector("#bs");
+  bs.removeEventListener("click", showValue);
+  bs.addEventListener("click", backspace);
 
   // evaluate
   var evaluate = document.querySelector("#evaluate");
