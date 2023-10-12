@@ -1,36 +1,89 @@
+const operators = ["/", "*", "+", "-"];
+const States = {
+  VALID: "Valid",
+  OPERATOR_ERROR: "Invalid Operator",
+  FORMAT_ERROR: "Invalid Format",
+  REPLACE_OPERATOR: "Replace Operator",
+};
 function showValue() {
-  function isValid(val) {
+  function validate(val) {
     let expr = expression.textContent;
+    let currVal = expr[expr.length - 1];
     if (val === ".") {
       // cant add two dots in a row
-      if (expr[expr.length - 1] == ".") {
-        return false;
+      if (currVal == ".") {
+        return States.FORMAT_ERROR;
+      }
+    } else if (operators.includes(val)) {
+      if (currVal == null) {
+        if (val != "-") {
+          return States.OPERATOR_ERROR;
+        } else {
+          return States.VALID;
+        }
+      }
+
+      if (operators.includes(currVal)) {
+        // cant have two operators unless one it is the minus sign
+        if (currVal == val) {
+          return States.FORMAT_ERROR;
+        } else if (val == "-") {
+          return States.VALID;
+        }
+        return States.REPLACE_OPERATOR;
       }
     }
-    return true;
+    return States.VALID;
   }
 
   let val = this.getAttribute("val");
-  if (isValid(val)) {
-    expression.textContent += val;
+  switch (validate(val)) {
+    case States.VALID:
+      expression.textContent += val;
+      break;
+    case States.REPLACE_OPERATOR:
+      expression.textContent = expression.textContent.slice(0, -1) + val;
+      break;
   }
 }
 
 function clearDisplay() {
-  document.querySelector("#history").textContent = "";
   expression.textContent = "";
 }
 
 function evaluateDisplay() {
+  function evalPercent(equation) {
+    let percentages = equation.match(/\d+%/g);
+    // console.log("PERCENTAGES", percentages);
+    if (percentages) {
+      percentages.forEach((percent) => {
+        let numericValue = parseFloat(percent) / 100;
+        equation = equation.replace(percent, numericValue);
+      });
+    }
+    return equation;
+  }
+
   let equation = expression.textContent;
   console.log(equation);
+
+  equation = evalPercent(equation);
+  console.log(equation);
+
   let result = eval(equation);
+  if (result % 1 != 0) {
+    let parts = result.toString().split(".");
+    // console.log(parts);
+    let decimal = parts[1];
+    if (decimal > 8) {
+      result = result.toFixed(8);
+      result = parseFloat(result).toString();
+    }
+  }
   expression.textContent = result;
-  document.querySelector("#history").textContent = equation;
 }
 
 function backspace() {
-  document.querySelector("#history").textContent = "";
   var textContent = expression.textContent;
   //   console.log(textContent); // for some reason it's adding the x, so go back 2
   var modifiedText = textContent.slice(0, -2);
@@ -38,8 +91,10 @@ function backspace() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  let history = document.querySelector("#history");
   const expression = document.querySelector("#expression");
+  //
+  expression.textContent = "96%+78%*3";
+  //
   var body = document.querySelector("body");
   body.classList.remove("preload");
   var body = document.querySelector("body");
